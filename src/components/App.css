@@ -1,0 +1,10 @@
+#game-main {
+  height: 80%;
+  border: 1px solid green;
+}
+
+#game-info {
+  margin-top: 5px;
+  height: 20%;
+  border: 1px solid green;
+}

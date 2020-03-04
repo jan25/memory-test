@@ -1,4 +1,9 @@
 #game-main {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-content: space-evenly;
   height: 80%;
   border: 1px solid green;
 }

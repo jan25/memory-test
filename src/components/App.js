@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import _ from "lodash";
+import _ from "lodash";
 import "./App.css";
 import NumberCard from "./NumberCard";
 
@@ -19,51 +19,31 @@ let calculateRowsColumns = (width, height) => {
   };
 };
 
-let toRowCol = cardID => {
-  let row = parseInt(cardID / NUMBER_CARD_HEIGHT);
-  let col = parseInt(cardID % NUMBER_CARD_WIDTH);
-  return {
-    row,
-    col
-  };
-};
+// let toRowCol = cardID => {
+//   let row = parseInt(cardID / NUMBER_CARD_HEIGHT);
+//   let col = parseInt(cardID % NUMBER_CARD_WIDTH);
+//   return {
+//     row,
+//     col
+//   };
+// };
 
-let toCardID = (row, col, colsPerRow) => {
-  return col + row * colsPerRow;
-};
-
-// compute random integer in range [a, b]
-let randInt = (a, b) => {
-  // return _.random(a, b + 1);
-  let r = Math.random();
-  return a + Math.floor(r * (b + 1 - a + 1));
-};
-
-let swap = (l, i, j) => {
-  const lj = l[j];
-  l[j] = l[i];
-  l[i] = lj;
-};
+// let toCardID = (row, col, colsPerRow) => {
+//   return col + row * colsPerRow;
+// };
 
 let calculateRandomPlaces = numCells => {
-  let cells = [];
-  for (let i = 0; i < numCells; ++i) cells.push(i);
+  let cells = _.range(0, numCells);
+  let shuffled = _.shuffle(cells);
+  let selected = _.slice(shuffled, 0, ACTIVE_NUMBERS);
 
-  let selected = new Set();
+  let cellToNum = {};
+  let num = 0;
+  _.forEach(selected, cell => {
+    cellToNum[cell] = num++;
+  });
 
-  for (let i = 0; i < ACTIVE_NUMBERS; ++i) {
-    let r = randInt(i, numCells - 1);
-    selected.add(cells[r]);
-    swap(cells, i, r);
-  }
-
-  console.log("selected", selected);
-
-  return {
-    isActive: cellID => {
-      return selected.has(cellID);
-    }
-  };
+  return cellToNum;
 };
 
 class App extends Component {
@@ -99,21 +79,10 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state);
-    const { cells } = this.state;
-    let cardNums = [];
-    for (let i = 0; i < cells; ++i) {
-      cardNums.push(i);
-    }
-    let randomPlaces = calculateRandomPlaces(cells);
-    console.log("randomPlaces", randomPlaces);
-
     return (
       <React.Fragment>
         <div ref={this.gameAreaRef} id="game-area">
-          {cardNums.map(n => (
-            <NumberCard key={n} num={n} active={randomPlaces.isActive(n)} />
-          ))}
+          {this.renderNumberCards()}
         </div>
         <div id="game-info">
           <h4>Click on 1 to start the test</h4>
@@ -125,6 +94,20 @@ class App extends Component {
           </p>
         </div>
       </React.Fragment>
+    );
+  }
+
+  renderNumberCards() {
+    const { cells } = this.state;
+    let cellNums = _.range(0, cells);
+    let cellsToNum = calculateRandomPlaces(cells);
+
+    return cellNums.map(n =>
+      n in cellsToNum ? (
+        <NumberCard key={n} cell={n} active={true} num={cellsToNum[n]} />
+      ) : (
+        <NumberCard key={n} cell={n} active={false} />
+      )
     );
   }
 }

@@ -9,12 +9,12 @@ class NumberCard extends Component {
   constructor(props) {
     super(props);
 
-    this.num = props.num;
+    this.cell = props.cell;
     this.active = props.active;
+    if (this.active) this.num = props.num;
   }
 
   render() {
-    console.log(this.num);
     if (!this.active) {
       return <div className="number-card inactive"></div>;
     }

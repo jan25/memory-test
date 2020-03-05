@@ -38,7 +38,7 @@ let calculateRandomPlaces = numCells => {
   let selected = _.slice(shuffled, 0, ACTIVE_NUMBERS);
 
   let cellToNum = {};
-  let num = 0;
+  let num = 1;
   _.forEach(selected, cell => {
     cellToNum[cell] = num++;
   });
@@ -104,9 +104,9 @@ class App extends Component {
 
     return cellNums.map(n =>
       n in cellsToNum ? (
-        <NumberCard key={n} cell={n} active={true} num={cellsToNum[n]} />
+        <NumberCard key={n} active={true} num={cellsToNum[n]} />
       ) : (
-        <NumberCard key={n} cell={n} active={false} />
+        <NumberCard key={n} active={false} />
       )
     );
   }

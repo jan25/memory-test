@@ -9,16 +9,27 @@ class NumberCard extends Component {
   constructor(props) {
     super(props);
 
-    this.cell = props.cell;
-    this.active = props.active;
-    if (this.active) this.num = props.num;
+    this.state = {
+      active: props.active,
+      num: props.num
+    };
   }
 
   render() {
-    if (!this.active) {
+    if (!this.state.active) {
       return <div className="number-card inactive"></div>;
     }
-    return <div className="number-card active">{this.num}</div>;
+    return (
+      <div className="number-card active">
+        <span onClick={() => this.onClick()}>{this.state.num}</span>
+      </div>
+    );
+  }
+
+  onClick() {
+    this.setState({
+      active: false
+    });
   }
 }
 

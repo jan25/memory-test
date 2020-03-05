@@ -6,6 +6,12 @@
 
 .number-card.active {
   border: 1px solid green;
+  font-size: 50px; /* this is half of number card width */
+  text-align: center;
+}
+
+.number-card.active > span:hover {
+  cursor: pointer;
 }
 
 .number-card.inactive {

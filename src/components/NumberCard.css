@@ -1,0 +1,13 @@
+.number-card {
+  width: 100px;
+  height: 100px;
+  margin: 5px;
+}
+
+.number-card.active {
+  border: 1px solid green;
+}
+
+.number-card.inactive {
+  visibility: hidden;
+}

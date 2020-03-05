@@ -57,6 +57,8 @@ let calculateRandomPlaces = numCells => {
     swap(cells, i, r);
   }
 
+  console.log("selected", selected);
+
   return {
     isActive: cellID => {
       return selected.has(cellID);
@@ -104,6 +106,7 @@ class App extends Component {
       cardNums.push(i);
     }
     let randomPlaces = calculateRandomPlaces(cells);
+    console.log("randomPlaces", randomPlaces);
 
     return (
       <React.Fragment>

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import _ from "lodash";
 import "./App.css";
 import NumberCard from "./NumberCard";
+import BlackWhiteCard from "./BlackWhiteCard";
 
 const NUMBER_CARD_MARGIN = 5;
 const NUMBER_CARD_WIDTH = 100 + 2 * NUMBER_CARD_MARGIN;

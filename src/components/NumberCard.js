@@ -1,5 +1,8 @@
 import React, { Component } from "react";
+import BlackWhiteCard from "./BlackWhiteCard";
 import "./NumberCard.css";
+
+const SOMETHING = 10;
 
 class NumberCard extends Component {
   state = {
@@ -21,14 +24,18 @@ class NumberCard extends Component {
     }
     return (
       <div className="number-card active">
-        <span onClick={() => this.onClick()}>{this.state.num}</span>
+        {this.state.turned ? (
+          <BlackWhiteCard width={100} onClick={() => this.onClick()} />
+        ) : (
+          <span onClick={() => this.onClick()}>{this.state.num}</span>
+        )}
       </div>
     );
   }
 
   onClick() {
     this.setState({
-      active: false
+      turned: !this.state.turned
     });
   }
 }

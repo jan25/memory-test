@@ -4,8 +4,8 @@
   margin: 5px;
 }
 
-.number-card.active {
-  border: 1px solid green;
+.number-card {
+  /* border: 1px solid green; */
   font-size: 75px; /* this is chosen based on number card width */
   text-align: center;
 }
@@ -18,11 +18,41 @@
   cursor: pointer;
 }
 
+@keyframes blinking {
+  0% {
+    color: white;
+  }
+  50% {
+    color: #333333;
+  }
+  100% {
+    color: white;
+  }
+}
+
+.blinking-one {
+  animation-name: blinking;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+.number-card.failed {
+  color: red;
+}
+
+.number-card.failed > span:hover {
+  cursor: pointer;
+}
+
 .number-card > img {
   width: 100%;
   height: 100%;
   vertical-align: top;
   overflow: hidden;
+}
+
+.number-card.done {
+  visibility: hid;
 }
 
 .number-card.inactive {

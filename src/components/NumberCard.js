@@ -17,18 +17,28 @@ class NumberCard extends Component {
     }
 
     if (this.props.failed) {
-      return <div className="number-card failed"></div>;
+      return (
+        <div className="number-card failed">
+          <span onClick={this.onNumClick}>{this.num}</span>
+        </div>
+      );
     } else if (this.props.done) {
       return <div className="number-card done"></div>;
     } else if (this.props.turned) {
       return (
-        <div className="number-card active">
-          <BlackWhiteCard width={100} onClick={() => this.onClick()} />
+        <div className="number-card active" onClick={this.onNumClick}>
+          <BlackWhiteCard width={100} />
         </div>
       );
     } else {
       return (
-        <div className="number-card active">
+        <div
+          className={
+            this.num === 1
+              ? "number-card active blinking-one"
+              : "number-card active"
+          }
+        >
           <span onClick={this.onNumClick}>{this.num}</span>
         </div>
       );

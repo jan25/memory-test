@@ -76,7 +76,7 @@ class App extends Component {
     this.cells = rows * cols;
 
     this.activeCellToNum = calculateRandomPlaces(this.cells);
-    this.doneNums = [];
+    this.state.doneNums = [];
     this.setState({
       nextNum: 1,
       turned: false,
@@ -112,7 +112,10 @@ class App extends Component {
         active={n in this.activeCellToNum}
         num={n in this.activeCellToNum ? this.activeCellToNum[n] : null}
         turned={this.state.turned}
-        done={this.doneNums.includes(n)}
+        done={
+          n in this.activeCellToNum &&
+          this.state.doneNums.includes(this.activeCellToNum[n])
+        }
         failed={this.state.failed}
         onNextNumClick={this.onNextNumClick}
       />
@@ -124,11 +127,13 @@ class App extends Component {
     if (num === 1) {
       this.setState({
         nextNum: 2,
-        turned: true
+        turned: true,
+        doneNums: _.concat(this.state.doneNums, [1])
       });
     } else if (num === this.state.nextNum) {
       this.setState({
-        nextNum: this.state.nextNum + 1
+        nextNum: this.state.nextNum + 1,
+        doneNums: _.concat(this.state.doneNums, [num])
       });
       // TODO handle with num == 9
     } else if (num !== this.state.nextNum) {

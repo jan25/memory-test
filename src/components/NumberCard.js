@@ -18,7 +18,7 @@ class NumberCard extends Component {
 
     if (this.props.failed) {
       return (
-        <div className="number-card failed">
+        <div className="number-card failed blinking-error">
           <span onClick={this.onNumClick}>{this.num}</span>
         </div>
       );

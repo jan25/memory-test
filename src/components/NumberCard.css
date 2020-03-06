@@ -18,21 +18,39 @@
   cursor: pointer;
 }
 
-@keyframes blinking {
+@keyframes blinking-one {
   0% {
-    color: white;
+    color: var(--faded-white);
   }
   50% {
-    color: #333333;
+    color: var(--faded-black);
   }
   100% {
-    color: white;
+    color: var(--faded-white);
   }
 }
 
 .blinking-one {
-  animation-name: blinking;
+  animation-name: blinking-one;
   animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes blinking-error {
+  0% {
+    color: red;
+  }
+  50% {
+    color: var(--faded-black);
+  }
+  100% {
+    color: red;
+  }
+}
+
+.blinking-error {
+  animation-name: blinking-error;
+  animation-duration: 1s;
   animation-iteration-count: infinite;
 }
 

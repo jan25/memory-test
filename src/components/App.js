@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import _ from "lodash";
 import "./App.css";
 import NumberCard from "./NumberCard";
-import BlackWhiteCard from "./BlackWhiteCard";
+// import BlackWhiteCard from "./BlackWhiteCard";
 
 const NUMBER_CARD_MARGIN = 5;
 const NUMBER_CARD_WIDTH = 100 + 2 * NUMBER_CARD_MARGIN;
@@ -48,34 +48,39 @@ let calculateRandomPlaces = numCells => {
 };
 
 class App extends Component {
-  state = {
-    rows: 0,
-    cols: 0,
-    cells: 0 // same as rows * cols
-  };
-
   constructor(props) {
     super(props);
 
     this.gameAreaRef = React.createRef();
     this.gameAreaHeight = 0;
     this.gameAreaWidth = 0;
+
+    this.activeCellToNum = [];
+    this.doneNums = [];
+    this.state = {
+      nextNum: 1,
+      turned: false,
+      failed: false
+    };
+    this.onNextNumClick = this.onNextNumClick.bind(this);
   }
 
   componentDidMount() {
     const gameAreaNode = this.gameAreaRef.current.getBoundingClientRect();
     this.gameAreaHeight = gameAreaNode.height;
     this.gameAreaWidth = gameAreaNode.width;
-    console.log(gameAreaNode.height, gameAreaNode.width);
     const { rows, cols } = calculateRowsColumns(
       this.gameAreaWidth,
       this.gameAreaHeight
     );
-    const cells = rows * cols;
+    this.cells = rows * cols;
+
+    this.activeCellToNum = calculateRandomPlaces(this.cells);
+    this.doneNums = [];
     this.setState({
-      rows,
-      cols,
-      cells
+      nextNum: 1,
+      turned: false,
+      failed: false
     });
   }
 
@@ -99,17 +104,38 @@ class App extends Component {
   }
 
   renderNumberCards() {
-    const { cells } = this.state;
-    let cellNums = _.range(0, cells);
-    let cellsToNum = calculateRandomPlaces(cells);
+    let cellNums = _.range(0, this.cells);
 
-    return cellNums.map(n =>
-      n in cellsToNum ? (
-        <NumberCard key={n} active={true} num={cellsToNum[n]} />
-      ) : (
-        <NumberCard key={n} active={false} />
-      )
-    );
+    return cellNums.map(n => (
+      <NumberCard
+        key={n}
+        active={n in this.activeCellToNum}
+        num={n in this.activeCellToNum ? this.activeCellToNum[n] : null}
+        turned={this.state.turned}
+        done={this.doneNums.includes(n)}
+        failed={this.state.failed}
+        onNextNumClick={this.onNextNumClick}
+      />
+    ));
+  }
+
+  onNextNumClick(num) {
+    console.log(num, num === 1, this.state);
+    if (num === 1) {
+      this.setState({
+        nextNum: 2,
+        turned: true
+      });
+    } else if (num === this.state.nextNum) {
+      this.setState({
+        nextNum: this.state.nextNum + 1
+      });
+      // TODO handle with num == 9
+    } else if (num !== this.state.nextNum) {
+      this.setState({
+        failed: true
+      });
+    }
   }
 }
 

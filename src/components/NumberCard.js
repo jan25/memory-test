@@ -2,41 +2,41 @@ import React, { Component } from "react";
 import BlackWhiteCard from "./BlackWhiteCard";
 import "./NumberCard.css";
 
-const SOMETHING = 10;
-
 class NumberCard extends Component {
-  state = {
-    turned: false // only used if this.active=true
-  };
-
   constructor(props) {
     super(props);
 
-    this.state = {
-      active: props.active,
-      num: props.num
-    };
+    this.num = props.num;
+    this.active = props.active;
+    this.onNumClick = this.onNumClick.bind(this);
   }
 
   render() {
-    if (!this.state.active) {
+    if (!this.active) {
       return <div className="number-card inactive"></div>;
     }
-    return (
-      <div className="number-card active">
-        {this.state.turned ? (
+
+    if (this.props.failed) {
+      return <div className="number-card failed"></div>;
+    } else if (this.props.done) {
+      return <div className="number-card done"></div>;
+    } else if (this.props.turned) {
+      return (
+        <div className="number-card active">
           <BlackWhiteCard width={100} onClick={() => this.onClick()} />
-        ) : (
-          <span onClick={() => this.onClick()}>{this.state.num}</span>
-        )}
-      </div>
-    );
+        </div>
+      );
+    } else {
+      return (
+        <div className="number-card active">
+          <span onClick={this.onNumClick}>{this.num}</span>
+        </div>
+      );
+    }
   }
 
-  onClick() {
-    this.setState({
-      turned: !this.state.turned
-    });
+  onNumClick() {
+    this.props.onNextNumClick(this.num);
   }
 }
 

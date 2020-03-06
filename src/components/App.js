@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import _ from "lodash";
 import "./App.css";
 import NumberCard from "./NumberCard";
+import Info from "./Info";
 // import BlackWhiteCard from "./BlackWhiteCard";
 
 const NUMBER_CARD_MARGIN = 5;
@@ -91,6 +92,7 @@ class App extends Component {
           {this.renderNumberCards()}
         </div>
         <div id="game-info">
+          <Info />
           <h4>Click on 1 to start the test</h4>
           <p>
             Goal: remember the layout of numbers 1-9 on this page. The numbers

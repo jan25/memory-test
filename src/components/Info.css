@@ -1,0 +1,12 @@
+.material-icons.md-light {
+  color: var(--too-faded-white);
+  cursor: pointer;
+}
+
+.material-icons.md-36 {
+  font-size: 36px;
+}
+
+.custom-header > span {
+  vertical-align: top;
+}

@@ -3,7 +3,7 @@ import _ from "lodash";
 import "./App.css";
 import NumberCard from "./NumberCard";
 import Info from "./Info";
-import { popSound } from "./Sounds";
+import { playSound } from "./Sounds";
 // import BlackWhiteCard from "./BlackWhiteCard";
 
 const NUMBER_CARD_MARGIN = 5;
@@ -130,13 +130,13 @@ class App extends Component {
       return;
     }
 
-    popSound();
     if (num === 1) {
       this.setState({
         nextNum: 2,
         turned: true,
         doneNums: _.concat(this.state.doneNums, [1])
       });
+      playSound("pop");
     } else if (num === this.state.nextNum) {
       this.setState({
         nextNum: this.state.nextNum + 1,
@@ -144,11 +144,15 @@ class App extends Component {
       });
       if (num == ACTIVE_NUMBERS) {
         this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL);
+        playSound("success");
+      } else {
+        playSound("pop");
       }
     } else if (num !== this.state.nextNum) {
       this.setState({
         failed: true
       });
+      playSound("fail");
       this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL);
     }
   }
@@ -156,6 +160,7 @@ class App extends Component {
   onReset() {
     clearInterval(this.autoResetInterval);
     this.reset();
+    playSound("flip");
   }
 
   reset() {

@@ -60,6 +60,7 @@ class App extends Component {
     this.doneNums = [];
     this.state = {
       nextNum: 1,
+      started: false,
       turned: false,
       failed: false
     };
@@ -80,6 +81,7 @@ class App extends Component {
     this.state.doneNums = [];
     this.setState({
       nextNum: 1,
+      started: false,
       turned: false,
       failed: false
     });
@@ -93,13 +95,6 @@ class App extends Component {
         </div>
         <div id="game-info">
           <Info />
-          <h4>Click on 1 to start the test</h4>
-          <p>
-            Goal: remember the layout of numbers 1-9 on this page. The numbers
-            are turned upside down when you click on number 1. And you have to
-            recall the remaining numbers in order by clicking on upside down
-            cards.
-          </p>
         </div>
       </React.Fragment>
     );
@@ -126,6 +121,10 @@ class App extends Component {
 
   onNextNumClick(num) {
     console.log(num, num === 1, this.state);
+    if (!this.state.turned && num !== 1) {
+      return;
+    }
+
     if (num === 1) {
       this.setState({
         nextNum: 2,
@@ -137,7 +136,7 @@ class App extends Component {
         nextNum: this.state.nextNum + 1,
         doneNums: _.concat(this.state.doneNums, [num])
       });
-      // TODO handle with num == 9
+      // TODO finish when num == 9
     } else if (num !== this.state.nextNum) {
       this.setState({
         failed: true

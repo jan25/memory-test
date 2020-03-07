@@ -5,7 +5,6 @@
 }
 
 .number-card {
-  /* border: 1px solid green; */
   font-size: 75px; /* this is chosen based on number card width */
   text-align: center;
 }

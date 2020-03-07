@@ -3,7 +3,7 @@ import _ from "lodash";
 import "./App.css";
 import NumberCard from "./NumberCard";
 import Info from "./Info";
-import Sounds from "./Sounds";
+import { popSound } from "./Sounds";
 // import BlackWhiteCard from "./BlackWhiteCard";
 
 const NUMBER_CARD_MARGIN = 5;
@@ -130,7 +130,7 @@ class App extends Component {
       return;
     }
 
-    <Sounds />;
+    popSound();
     if (num === 1) {
       this.setState({
         nextNum: 2,

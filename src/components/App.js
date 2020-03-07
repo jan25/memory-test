@@ -4,15 +4,13 @@ import "./App.css";
 import NumberCard from "./NumberCard";
 import Info from "./Info";
 import { playSound } from "./Sounds";
-// import BlackWhiteCard from "./BlackWhiteCard";
 
 const NUMBER_CARD_MARGIN = 5;
 const NUMBER_CARD_WIDTH = 100 + 2 * NUMBER_CARD_MARGIN;
 const NUMBER_CARD_HEIGHT = NUMBER_CARD_WIDTH;
 
-// starting from 1
-const ACTIVE_NUMBERS = 9;
-const RESET_INTERVAL = 7000; // 7s
+const ACTIVE_NUMBERS = 5; // numbers start from 1
+const RESET_INTERVAL = 6000; // 6s
 
 let calculateRowsColumns = (width, height) => {
   let rows = parseInt(width / NUMBER_CARD_WIDTH);
@@ -22,19 +20,6 @@ let calculateRowsColumns = (width, height) => {
     cols
   };
 };
-
-// let toRowCol = cardID => {
-//   let row = parseInt(cardID / NUMBER_CARD_HEIGHT);
-//   let col = parseInt(cardID % NUMBER_CARD_WIDTH);
-//   return {
-//     row,
-//     col
-//   };
-// };
-
-// let toCardID = (row, col, colsPerRow) => {
-//   return col + row * colsPerRow;
-// };
 
 let calculateRandomPlaces = numCells => {
   let cells = _.range(0, numCells);
@@ -103,29 +88,34 @@ class App extends Component {
   }
 
   renderNumberCards() {
-    let cellNums = _.range(0, this.cells);
-    console.log(this.state);
-    console.log(this.state.activeCellToNum);
+    const cellNums = _.range(0, this.cells);
+
     return cellNums.map(n => (
       <NumberCard
         key={n}
-        active={n in this.state.activeCellToNum}
-        num={
-          n in this.state.activeCellToNum ? this.state.activeCellToNum[n] : null
-        }
+        active={this.isActive(n)}
+        num={this.cellToNum(n)}
         turned={this.state.turned}
-        done={
-          n in this.state.activeCellToNum &&
-          this.state.doneNums.includes(this.state.activeCellToNum[n])
-        }
+        done={this.cardIsDone(n)}
         failed={this.state.failed}
         onNumClick={this.onNextNumClick}
       />
     ));
   }
 
+  isActive(cell) {
+    return cell in this.state.activeCellToNum;
+  }
+
+  cellToNum(cell) {
+    return this.isActive(cell) ? this.state.activeCellToNum[cell] : null;
+  }
+
+  cardIsDone(cell) {
+    return this.state.doneNums.includes(this.cellToNum(cell));
+  }
+
   onNextNumClick(num) {
-    console.log("onNextNumClick", num);
     if (!this.state.turned && num !== 1) {
       return;
     }
@@ -143,7 +133,7 @@ class App extends Component {
         doneNums: _.concat(this.state.doneNums, [num])
       });
       if (num == ACTIVE_NUMBERS) {
-        this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL);
+        this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL / 2);
         playSound("success");
       } else {
         playSound("pop");
@@ -152,8 +142,8 @@ class App extends Component {
       this.setState({
         failed: true
       });
-      playSound("fail");
       this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL);
+      playSound("fail");
     }
   }
 

@@ -81,13 +81,19 @@ class App extends Component {
   }
 
   render() {
+    const showResetBtn = this.state.turned || this.state.failed;
+
     return (
       <React.Fragment>
         <div ref={this.gameAreaRef} id="game-area">
           {this.renderNumberCards()}
         </div>
         <div id="game-info">
-          <Info showInfo={false} showReset={true} onReset={this.onReset} />
+          <Info
+            showInfo={!showResetBtn}
+            showReset={showResetBtn}
+            onReset={this.onReset}
+          />
         </div>
       </React.Fragment>
     );

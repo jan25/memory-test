@@ -1,39 +1,13 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import "./App.css";
 import NumberCard from "./NumberCard";
 import Info from "./Info";
+import { calculateRandomPlaces, calculateRowsColumns } from "./Utils";
 import { playSound } from "./Sounds";
-
-const NUMBER_CARD_MARGIN = 5;
-const NUMBER_CARD_WIDTH = 100 + 2 * NUMBER_CARD_MARGIN;
-const NUMBER_CARD_HEIGHT = NUMBER_CARD_WIDTH;
+import "./App.css";
 
 const ACTIVE_NUMBERS = 5; // numbers start from 1
 const RESET_INTERVAL = 6000; // 6s
-
-let calculateRowsColumns = (width, height) => {
-  let rows = parseInt(width / NUMBER_CARD_WIDTH);
-  let cols = parseInt(height / NUMBER_CARD_HEIGHT);
-  return {
-    rows,
-    cols
-  };
-};
-
-let calculateRandomPlaces = numCells => {
-  let cells = _.range(0, numCells);
-  let shuffled = _.shuffle(cells);
-  let selected = _.slice(shuffled, 0, ACTIVE_NUMBERS);
-
-  let cellToNum = {};
-  let num = 1;
-  _.forEach(selected, cell => {
-    cellToNum[cell] = num++;
-  });
-
-  return cellToNum;
-};
 
 class App extends Component {
   constructor(props) {
@@ -155,7 +129,7 @@ class App extends Component {
 
   reset() {
     this.setState({
-      activeCellToNum: calculateRandomPlaces(this.cells),
+      activeCellToNum: calculateRandomPlaces(this.cells, ACTIVE_NUMBERS),
       nextNum: 1,
       doneNums: [],
       turned: false,

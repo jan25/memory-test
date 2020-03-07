@@ -14,27 +14,31 @@ class NumberCard extends Component {
           <span>{this.props.num}</span>
         </div>
       );
-    } else if (this.props.done) {
+    }
+
+    if (this.props.done) {
       return <div className="number-card done"></div>;
-    } else if (this.props.turned) {
+    }
+
+    if (this.props.turned) {
       return (
         <div className="number-card active" onClick={() => this.onClick()}>
           <BlackWhiteCard width={100} />
         </div>
       );
-    } else {
-      return (
-        <div
-          className={
-            this.props.num === 1
-              ? "number-card active blinking-one"
-              : "number-card active"
-          }
-        >
-          <span onClick={() => this.onClick()}>{this.props.num}</span>
-        </div>
-      );
     }
+
+    return (
+      <div
+        className={
+          this.props.num === 1
+            ? "number-card active blinking-one"
+            : "number-card active"
+        }
+      >
+        <span onClick={() => this.onClick()}>{this.props.num}</span>
+      </div>
+    );
   }
 
   onClick() {

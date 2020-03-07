@@ -1,22 +1,15 @@
-import React, { Component } from "react";
-import blackwhite from "../blackwhite.png";
+import React from "react";
+import blackwhite from "../assets/checker-board.png";
 
-class BlackWhiteCard extends Component {
-  constructor(props) {
-    super(props);
-    this.width = props.width;
-  }
-
-  render() {
-    return (
-      <img
-        src={blackwhite}
-        alt="missing blackwhite image"
-        height={this.width}
-        width={this.width}
-      />
-    );
-  }
-}
+const BlackWhiteCard = props => {
+  return (
+    <img
+      src={blackwhite}
+      height={props.width}
+      width={props.width}
+      alt="blackwhite card"
+    />
+  );
+};
 
 export default BlackWhiteCard;

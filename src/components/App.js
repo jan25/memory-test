@@ -132,7 +132,7 @@ class App extends Component {
         nextNum: this.state.nextNum + 1,
         doneNums: _.concat(this.state.doneNums, [num])
       });
-      if (num == ACTIVE_NUMBERS) {
+      if (num === ACTIVE_NUMBERS) {
         this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL / 2);
         playSound("success");
       } else {

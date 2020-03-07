@@ -3,6 +3,7 @@ import _ from "lodash";
 import "./App.css";
 import NumberCard from "./NumberCard";
 import Info from "./Info";
+import Sounds from "./Sounds";
 // import BlackWhiteCard from "./BlackWhiteCard";
 
 const NUMBER_CARD_MARGIN = 5;
@@ -11,6 +12,7 @@ const NUMBER_CARD_HEIGHT = NUMBER_CARD_WIDTH;
 
 // starting from 1
 const ACTIVE_NUMBERS = 9;
+const RESET_INTERVAL = 7000; // 7s
 
 let calculateRowsColumns = (width, height) => {
   let rows = parseInt(width / NUMBER_CARD_WIDTH);
@@ -65,6 +67,7 @@ class App extends Component {
     };
     this.onNextNumClick = this.onNextNumClick.bind(this);
     this.onReset = this.onReset.bind(this);
+    this.autoResetInterval = null;
   }
 
   componentDidMount() {
@@ -127,6 +130,7 @@ class App extends Component {
       return;
     }
 
+    <Sounds />;
     if (num === 1) {
       this.setState({
         nextNum: 2,
@@ -138,15 +142,19 @@ class App extends Component {
         nextNum: this.state.nextNum + 1,
         doneNums: _.concat(this.state.doneNums, [num])
       });
-      // TODO finish when num == 9
+      if (num == ACTIVE_NUMBERS) {
+        this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL);
+      }
     } else if (num !== this.state.nextNum) {
       this.setState({
         failed: true
       });
+      this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL);
     }
   }
 
   onReset() {
+    clearInterval(this.autoResetInterval);
     this.reset();
   }
 

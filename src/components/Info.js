@@ -20,7 +20,7 @@ class Info extends Component {
     return (
       <div>
         <i className="material-icons" onClick={this.props.onReset}>
-          replay
+          refresh
         </i>
       </div>
     );

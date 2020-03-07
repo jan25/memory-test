@@ -7,3 +7,4 @@
 
 // output
 // upto 25 interesting configurations
+// dump to JSON file asset

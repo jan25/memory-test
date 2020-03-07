@@ -6,13 +6,30 @@ class Info extends Component {
   state = {
     showModal: false
   };
+
   render() {
+    const { showInfo, showReset } = this.props;
+    if (showInfo) {
+      return this.renderInfo();
+    } else if (showReset) {
+      return this.renderResetBtn();
+    }
+  }
+
+  renderResetBtn() {
     return (
       <div>
-        <i
-          className="material-icons md-light md-inactive"
-          onClick={() => this.openModal()}
-        >
+        <i className="material-icons" onClick={this.props.onReset}>
+          replay
+        </i>
+      </div>
+    );
+  }
+
+  renderInfo() {
+    return (
+      <div>
+        <i className="material-icons md-light" onClick={() => this.openModal()}>
           info
         </i>
         <Modal

@@ -56,15 +56,15 @@ class App extends Component {
     this.gameAreaHeight = 0;
     this.gameAreaWidth = 0;
 
-    this.activeCellToNum = [];
-    this.doneNums = [];
     this.state = {
+      activeCellToNum: {},
       nextNum: 1,
-      started: false,
+      doneNums: [],
       turned: false,
       failed: false
     };
     this.onNextNumClick = this.onNextNumClick.bind(this);
+    this.onReset = this.onReset.bind(this);
   }
 
   componentDidMount() {
@@ -77,14 +77,7 @@ class App extends Component {
     );
     this.cells = rows * cols;
 
-    this.activeCellToNum = calculateRandomPlaces(this.cells);
-    this.state.doneNums = [];
-    this.setState({
-      nextNum: 1,
-      started: false,
-      turned: false,
-      failed: false
-    });
+    this.reset();
   }
 
   render() {
@@ -94,7 +87,7 @@ class App extends Component {
           {this.renderNumberCards()}
         </div>
         <div id="game-info">
-          <Info />
+          <Info showInfo={false} showReset={true} onReset={this.onReset} />
         </div>
       </React.Fragment>
     );
@@ -102,25 +95,28 @@ class App extends Component {
 
   renderNumberCards() {
     let cellNums = _.range(0, this.cells);
-
+    console.log(this.state);
+    console.log(this.state.activeCellToNum);
     return cellNums.map(n => (
       <NumberCard
         key={n}
-        active={n in this.activeCellToNum}
-        num={n in this.activeCellToNum ? this.activeCellToNum[n] : null}
+        active={n in this.state.activeCellToNum}
+        num={
+          n in this.state.activeCellToNum ? this.state.activeCellToNum[n] : null
+        }
         turned={this.state.turned}
         done={
-          n in this.activeCellToNum &&
-          this.state.doneNums.includes(this.activeCellToNum[n])
+          n in this.state.activeCellToNum &&
+          this.state.doneNums.includes(this.state.activeCellToNum[n])
         }
         failed={this.state.failed}
-        onNextNumClick={this.onNextNumClick}
+        onNumClick={this.onNextNumClick}
       />
     ));
   }
 
   onNextNumClick(num) {
-    console.log(num, num === 1, this.state);
+    console.log("onNextNumClick", num);
     if (!this.state.turned && num !== 1) {
       return;
     }
@@ -142,6 +138,20 @@ class App extends Component {
         failed: true
       });
     }
+  }
+
+  onReset() {
+    this.reset();
+  }
+
+  reset() {
+    this.setState({
+      activeCellToNum: calculateRandomPlaces(this.cells),
+      nextNum: 1,
+      doneNums: [],
+      turned: false,
+      failed: false
+    });
   }
 }
 

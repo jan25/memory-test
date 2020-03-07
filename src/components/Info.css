@@ -1,6 +1,9 @@
+.material-icons {
+  cursor: pointer;
+}
+
 .material-icons.md-light {
   color: var(--too-faded-white);
-  cursor: pointer;
 }
 
 .material-icons.md-36 {

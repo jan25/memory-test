@@ -5,4 +5,4 @@
 - Add source link on page
 - rename /build dir to /game so it looks petty in github page URL
 - Add links to known wildlife conservation sites for help
-- Find way to not have `/build` in git - currently it takes 3.6mb space
+- Load assets asynchronously so initial load won't take long

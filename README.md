@@ -4,7 +4,7 @@
 
 How well can you remember a random layout of numbers? Try this game to test your short term memory skills. In this game you are presented with random layout of numbers from 1 through 9, your goal is to remember them and recall them when they're hidden from you.
 
-Try it here - [memory-test/game](jan25.github.io/memory-test/build)
+Try it here - [memory-test/game](jan25.github.io/memory-test)
 
 ## Contribute
 
@@ -21,8 +21,11 @@ $ cd path/to/memory-test/
 # start dev server on localhost:3000
 $ npm start
 
-# make production build
-$ npm run build
+# make and test production build
+$ npm run predeploy
+
+# deploy to github pages
+$ npm run deploy
 ```
 
 We will keep track of bug fixes, features, improvements etc. in the [Issues](https://github.com/jan25/memory-test/issues) section. Also some ideas are in NOTES.md.

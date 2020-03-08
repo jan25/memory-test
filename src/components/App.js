@@ -6,7 +6,7 @@ import { calculateRandomPlaces, calculateRowsColumns } from "./Utils";
 import { playSound } from "./Sounds";
 import "./App.css";
 
-const ACTIVE_NUMBERS = 5; // numbers start from 1
+const ACTIVE_NUMBERS = 9; // numbers start from 1
 const RESET_INTERVAL = 6000; // 6s
 
 class App extends Component {

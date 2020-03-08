@@ -1,4 +1,4 @@
-<img src="/public/chimp-favicon.png" width="100" style="float:left">
+<img src="/public/chimp-favicon.png" width="75" style="float:left">
 
 # Memory test - Chimp vs Human
 
@@ -25,7 +25,7 @@ $ npm start
 $ npm run build
 ```
 
-We will keep track of bug fixes, features, improvements etc. in the [Issues](TODO) section. Also some ideas are in NOTES.md.
+We will keep track of bug fixes, features, improvements etc. in the [Issues](https://github.com/jan25/memory-test/issues) section. Also some ideas are in NOTES.md.
 
 ## Motivation
 

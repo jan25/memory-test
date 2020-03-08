@@ -18,7 +18,7 @@ Try it here - [memory-test/game](https://jan25.github.io/memory-test)
 ```
 $ cd path/to/memory-test/
 
-# start dev server on localhost:3000
+# start dev server on localhost:3000/memory-test
 $ npm start
 
 # make and test production build

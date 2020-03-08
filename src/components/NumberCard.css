@@ -69,7 +69,7 @@
 }
 
 .number-card.done {
-  visibility: hid;
+  visibility: hidden;
 }
 
 .number-card.inactive {

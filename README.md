@@ -4,7 +4,7 @@
 
 How well can you remember a random layout of numbers? Try this game to test your short term memory skills. In this game you are presented with random layout of numbers from 1 through 9, your goal is to remember them and recall them when they're hidden from you.
 
-Try it here - [memory-test/game](jan25.github.io/memory-test)
+Try it here - [memory-test/game](https://jan25.github.io/memory-test)
 
 ## Contribute
 

@@ -30,11 +30,7 @@ class NumberCard extends Component {
 
     return (
       <div
-        className={
-          this.props.num === 1
-            ? "number-card active blinking-one"
-            : "number-card active"
-        }
+        className={"number-card active"}
       >
         <span onClick={() => this.onClick()}>{this.props.num}</span>
       </div>

@@ -18,7 +18,6 @@ html {
 body {
   width: 100%;
   height: 100%;
-  background-color: var(--main-bg-color);
 
   /* necessary to hide scrollbars */
   margin: 0;
@@ -29,12 +28,20 @@ body {
   align-items: center;
 }
 
+#game-card {
+  background-color: #fff;
+  padding: 0px 9px;
+  height: 100%;
+  box-shadow: #94949447 0px 0px 12px 8px;
+}
+
 /* App component container */
 #root {
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 90%;
+  width: 1050px;
   color: var(--main-font-color);
+  background-color: var(--main-bg-color);
   padding: 5px;
 }

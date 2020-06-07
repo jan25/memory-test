@@ -2,12 +2,15 @@ import React, { Component } from "react";
 import _ from "lodash";
 import NumberCard from "./NumberCard";
 import Info from "./Info";
+import Reset from "./Reset";
+import Result from "./Result";
+import Counter from "./Counter";
 import { calculateRandomPlaces, calculateRowsColumns } from "./Utils";
 import { playSound } from "./Sounds";
 import "./App.css";
 
-const ACTIVE_NUMBERS = 9; // numbers start from 1
-const RESET_INTERVAL = 6000; // 6s
+let ACTIVE_NUMBERS = 4; // numbers start from 1
+//const RESET_INTERVAL = 6000; // 6s
 
 class App extends Component {
   constructor(props) {
@@ -22,7 +25,9 @@ class App extends Component {
       nextNum: 1,
       doneNums: [],
       turned: false,
-      failed: false
+      failed: false,
+      subRounds: 1,
+      level: 1,
     };
     this.onNextNumClick = this.onNextNumClick.bind(this);
     this.onReset = this.onReset.bind(this);
@@ -39,23 +44,44 @@ class App extends Component {
     );
     this.cells = rows * cols;
 
-    this.reset();
+    this.resetGame();
   }
 
   render() {
-    const showResetBtn = this.state.turned || this.state.failed;
+    const showResetBtn = (this.state.level + this.state.subRounds > 2);
 
     return (
       <React.Fragment>
+        <div id="game-score">
+          <Counter
+            name="Level: "
+            count={this.state.level}
+          />
+          <Counter
+            name="Score: "
+            count={1000*(this.state.level-1) + 330*(this.state.subRounds-1)}
+          />
+        </div>
         <div ref={this.gameAreaRef} id="game-area">
           {this.renderNumberCards()}
         </div>
-        <div id="game-info">
-          <Info
-            showInfo={!showResetBtn}
-            showReset={showResetBtn}
-            onReset={this.onReset}
-          />
+        <div id="game-menu">
+          <div id="game-info">
+            <Info/>
+          </div>
+          <div id="game-reset">
+            <Reset
+              showReset={showResetBtn}
+              onReset={this.onReset}
+            />
+          </div>
+          <div>
+            <Result
+              score={1000*(this.state.level-1) + 330*(this.state.subRounds-1)}
+              showResult={this.state.failed}
+              resetGame={this.onReset}
+            />
+          </div>
         </div>
       </React.Fragment>
     );
@@ -107,8 +133,20 @@ class App extends Component {
         doneNums: _.concat(this.state.doneNums, [num])
       });
       if (num === ACTIVE_NUMBERS) {
-        this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL / 2);
+        // this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL / 2);
         playSound("success");
+        this.setState({
+          subRounds: this.state.subRounds + 1,
+        })
+        if(this.state.subRounds >= 3) {
+          ACTIVE_NUMBERS += 1;
+          this.setState({
+            level: this.state.level + 1,
+            subRounds: 0,
+          })
+        }
+        clearInterval(this.autoResetInterval);
+        this.resetLevel();
       } else {
         playSound("pop");
       }
@@ -116,18 +154,31 @@ class App extends Component {
       this.setState({
         failed: true
       });
-      this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL);
+     // this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL);
       playSound("fail");
     }
   }
 
   onReset() {
     clearInterval(this.autoResetInterval);
-    this.reset();
+    ACTIVE_NUMBERS = 4
+    this.resetGame();
     playSound("flip");
   }
 
-  reset() {
+  resetGame() {
+    this.setState({
+      activeCellToNum: calculateRandomPlaces(this.cells, ACTIVE_NUMBERS),
+      nextNum: 1,
+      doneNums: [],
+      turned: false,
+      failed: false,
+      level: 1,
+      subRounds: 1
+    });
+  }
+
+  resetLevel() {
     this.setState({
       activeCellToNum: calculateRandomPlaces(this.cells, ACTIVE_NUMBERS),
       nextNum: 1,

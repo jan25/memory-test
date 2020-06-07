@@ -8,22 +8,8 @@ class Info extends Component {
   };
 
   render() {
-    const { showInfo, showReset } = this.props;
-    if (showInfo) {
-      return this.renderInfo();
-    } else if (showReset) {
-      return this.renderResetBtn();
-    }
-  }
+    return this.renderInfo();
 
-  renderResetBtn() {
-    return (
-      <div>
-        <i className="material-icons" onClick={this.props.onReset}>
-          refresh
-        </i>
-      </div>
-    );
   }
 
   renderInfo() {

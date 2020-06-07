@@ -1,0 +1,28 @@
+.material-icons {
+  cursor: pointer;
+}
+
+.material-icons.md-light {
+  color: var(--too-faded-white);
+}
+
+.material-icons.md-36 {
+  font-size: 36px;
+}
+
+.custom-header > span {
+  vertical-align: top;
+}
+
+.modal-body {
+  text-align: center;
+}
+
+.button {
+  margin: auto;
+  border: none;
+  padding: 7px 20px 11px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: #d6d6d66b 0px 2px 7px 5px;
+}

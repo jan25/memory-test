@@ -1,41 +1,30 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import "./Info.css";
 
-class Info extends Component {
-  state = {
-    showModal: false
-  };
+const Info = ({ showInfo, showReset, onReset }) => {
+  const [modalOpen, setModalOpen] = useState(false);
 
-  render() {
-    const { showInfo, showReset } = this.props;
-    if (showInfo) {
-      return this.renderInfo();
-    } else if (showReset) {
-      return this.renderResetBtn();
-    }
-  }
-
-  renderResetBtn() {
+  const renderResetBtn = () => {
     return (
       <div>
-        <i className="material-icons" onClick={this.props.onReset}>
+        <i className="material-icons" onClick={onReset}>
           refresh
         </i>
       </div>
     );
   }
 
-  renderInfo() {
+  const renderInfo = () => {
     return (
       <div>
-        <i className="material-icons md-light" onClick={() => this.openModal()}>
+        <i className="material-icons md-light" onClick={() => setModalOpen(true)}>
           info
         </i>
         <Modal
           centered={true}
-          show={this.state.showModal}
-          onHide={() => this.closeModal()}
+          show={modalOpen}
+          onHide={() => setModalOpen(false)}
         >
           <Modal.Header closeButton>
             <Modal.Title>
@@ -66,16 +55,10 @@ class Info extends Component {
     );
   }
 
-  openModal() {
-    this.setState({
-      showModal: true
-    });
-  }
-
-  closeModal() {
-    this.setState({
-      showModal: false
-    });
+  if (showInfo) {
+    return renderInfo();
+  } else if (showReset) {
+    return renderResetBtn();
   }
 }
 

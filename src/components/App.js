@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import _ from "lodash";
 import NumberCard from "./NumberCard";
 import Info from "./Info";
@@ -9,133 +9,141 @@ import "./App.css";
 const ACTIVE_NUMBERS = 9; // numbers start from 1
 const RESET_INTERVAL = 6000; // 6s
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+const App = () => {
+  const gameAreaRef = useRef(null);
 
-    this.gameAreaRef = React.createRef();
-    this.gameAreaHeight = 0;
-    this.gameAreaWidth = 0;
+  const [gameState, setGameState] = useState({
+    activeCellToNum: {},
+    nextNum: 1,
+    turned: false,
+    failed: false
+  });
 
-    this.state = {
-      activeCellToNum: {},
+  const [gameAreaDims, setGameAreaDims] = useState({
+    gameAreaHeight: 0,
+    gameAreaWidth: 0,
+    cells: 0
+  });
+
+  const reset = useCallback(() => {
+    setGameState({
+      activeCellToNum: calculateRandomPlaces(gameAreaDims.cells, ACTIVE_NUMBERS),
       nextNum: 1,
-      doneNums: [],
       turned: false,
       failed: false
-    };
-    this.onNextNumClick = this.onNextNumClick.bind(this);
-    this.onReset = this.onReset.bind(this);
-    this.autoResetInterval = null;
+    });
+  }, [gameAreaDims.cells, setGameState]);
+
+  useEffect(() => {
+    const gameAreaNode = gameAreaRef.current.getBoundingClientRect();
+    const gameAreaHeight = gameAreaNode.height;
+    const gameAreaWidth = gameAreaNode.width;
+    const { rows, cols } = calculateRowsColumns(gameAreaWidth, gameAreaHeight);
+    const cells = rows * cols;
+    setGameAreaDims({ gameAreaHeight, gameAreaWidth, cells });
+  }, [setGameAreaDims]);
+
+  useEffect(() => {
+    reset(gameAreaDims.cells);
+  }, [gameAreaDims.cells, reset]);
+
+  const [autoResetTimeout, setAutoResetTimeout] = useState(null);
+
+  const isActive = (cell) => {
+    return cell in gameState.activeCellToNum;
   }
 
-  componentDidMount() {
-    const gameAreaNode = this.gameAreaRef.current.getBoundingClientRect();
-    this.gameAreaHeight = gameAreaNode.height;
-    this.gameAreaWidth = gameAreaNode.width;
-    const { rows, cols } = calculateRowsColumns(
-      this.gameAreaWidth,
-      this.gameAreaHeight
-    );
-    this.cells = rows * cols;
-
-    this.reset();
+  const cellToNum = (cell) => {
+    return isActive(cell) ? gameState.activeCellToNum[cell] : null;
   }
 
-  render() {
-    const showResetBtn = this.state.turned || this.state.failed;
-
-    return (
-      <React.Fragment>
-        <div ref={this.gameAreaRef} id="game-area">
-          {this.renderNumberCards()}
-        </div>
-        <div id="game-info">
-          <Info
-            showInfo={!showResetBtn}
-            showReset={showResetBtn}
-            onReset={this.onReset}
-          />
-        </div>
-      </React.Fragment>
-    );
+  const cardIsDone = (cell) => {
+    return cellToNum(cell) < gameState.nextNum;
   }
 
-  renderNumberCards() {
-    const cellNums = _.range(0, this.cells);
-
-    return cellNums.map(n => (
-      <NumberCard
-        key={n}
-        active={this.isActive(n)}
-        num={this.cellToNum(n)}
-        turned={this.state.turned}
-        done={this.cardIsDone(n)}
-        failed={this.state.failed}
-        onNumClick={this.onNextNumClick}
-      />
-    ));
-  }
-
-  isActive(cell) {
-    return cell in this.state.activeCellToNum;
-  }
-
-  cellToNum(cell) {
-    return this.isActive(cell) ? this.state.activeCellToNum[cell] : null;
-  }
-
-  cardIsDone(cell) {
-    return this.state.doneNums.includes(this.cellToNum(cell));
-  }
-
-  onNextNumClick(num) {
-    if (!this.state.turned && num !== 1) {
+  const onNextNumClick = (num) => {
+    if (!gameState.turned && num !== 1) {
       return;
     }
 
+    // Begin playing a round
     if (num === 1) {
-      this.setState({
+      setGameState({
+        ...gameState,
         nextNum: 2,
-        turned: true,
-        doneNums: _.concat(this.state.doneNums, [1])
+        turned: true
       });
       playSound("pop");
-    } else if (num === this.state.nextNum) {
-      this.setState({
-        nextNum: this.state.nextNum + 1,
-        doneNums: _.concat(this.state.doneNums, [num])
+
+      return;
+    }
+
+    // Each good move in a round
+    if (num === gameState.nextNum) {
+      setGameState({
+        ...gameState,
+        nextNum: gameState.nextNum + 1
       });
+
       if (num === ACTIVE_NUMBERS) {
-        this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL / 2);
+        setAutoResetTimeout(setTimeout(onReset, RESET_INTERVAL / 2));
         playSound("success");
       } else {
         playSound("pop");
       }
-    } else if (num !== this.state.nextNum) {
-      this.setState({
+
+      return;
+    }
+
+    // Bad move ends the round 
+    if (num !== gameState.nextNum) {
+      setGameState({
+        ...gameState,
         failed: true
       });
-      this.autoResetInterval = setInterval(this.onReset, RESET_INTERVAL);
+      setAutoResetTimeout(setTimeout(onReset, RESET_INTERVAL));
       playSound("fail");
+
+      return;
     }
   }
 
-  onReset() {
-    clearInterval(this.autoResetInterval);
-    this.reset();
+  const onReset = () => {
+    clearTimeout(autoResetTimeout);
+    reset();
     playSound("flip");
   }
 
-  reset() {
-    this.setState({
-      activeCellToNum: calculateRandomPlaces(this.cells, ACTIVE_NUMBERS),
-      nextNum: 1,
-      doneNums: [],
-      turned: false,
-      failed: false
-    });
-  }
+  const showResetBtn = gameState.turned || gameState.failed;
+
+  return (
+    <>
+      <div ref={gameAreaRef} id="game-area">
+        {
+          _.range(0, gameAreaDims.cells)
+            .map(num => (
+              <NumberCard
+                key={num}
+                active={isActive(num)}
+                num={cellToNum(num)}
+                turned={gameState.turned}
+                done={cardIsDone(num)}
+                failed={gameState.failed}
+                onNumClick={onNextNumClick}
+              />
+            ))
+        }
+      </div>
+
+      <div id="game-info">
+        <Info
+          showInfo={!showResetBtn}
+          showReset={showResetBtn}
+          onReset={onReset}
+        />
+      </div>
+    </>
+  );
 }
 
 export default App;

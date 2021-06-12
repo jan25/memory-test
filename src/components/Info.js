@@ -1,16 +1,59 @@
-import React, { useState } from "react";
-import Modal from "react-bootstrap/Modal";
+import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import RefreshSharpIcon from '@material-ui/icons/RefreshSharp';
+import Typography from '@material-ui/core/Typography';
 import "./Info.css";
 
+const styles = (theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+});
+
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
+
 const Info = ({ showInfo, showReset, onReset }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const renderResetBtn = () => {
     return (
       <div>
-        <i className="material-icons" onClick={onReset}>
-          refresh
-        </i>
+        <RefreshSharpIcon className="icons" onClick={onReset} />
       </div>
     );
   }
@@ -18,42 +61,32 @@ const Info = ({ showInfo, showReset, onReset }) => {
   const renderInfo = () => {
     return (
       <div>
-        <i className="material-icons md-light" onClick={() => setModalOpen(true)}>
-          info
-        </i>
-        <Modal
-          centered={true}
-          show={modalOpen}
-          onHide={() => setModalOpen(false)}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>
-              <div className="custom-header">
-                <i className="material-icons md-36">info</i>
-                <span>Info</span>
-              </div>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            This game is a memory test for your brain on how well it can store
-            information for short term recollection.
-            <Modal.Title>Instructions</Modal.Title>
-            <ol>
-              <li>Remember the layout of numbers given to you</li>
-              <li>
-                Click on number <i>1</i> to hide the numbers under cards
-              </li>
-              <li>
-                Now click on cards in order of numbers as you've seen them
-                before
-              </li>
-              <li>Continue (3) until all numbers are collected</li>
-            </ol>
-          </Modal.Body>
-        </Modal>
+        <InfoOutlinedIcon className="icons" onClick={() => setOpen(true)} />
+        <Dialog onClose={handleClose} aria-labelledby="dialog-title" open={open}>
+          <DialogTitle id="dialog-title" onClose={handleClose}>
+            <InfoOutlinedIcon /> Info
+          </DialogTitle>
+          <DialogContent dividers>
+            <Typography gutterBottom>This game is a memory test for your brain on how well it can store
+             information for short term recollection.</Typography>
+            <Typography gutterBottom variant="h6">Instructions</Typography>
+            <Typography gutterBottom>
+              1. Remember the layout of numbers given to you
+            </Typography>
+            <Typography gutterBottom>
+              2. Click on number <b>1</b> to hide the numbers under cards
+            </Typography>
+            <Typography gutterBottom>
+              3. Now click on cards in order of numbers as you've seen them before
+            </Typography>
+            <Typography gutterBottom>
+              4. Continue (3) until all numbers are collected
+            </Typography>
+          </DialogContent>
+        </Dialog>
       </div>
     );
-  }
+  };
 
   if (showInfo) {
     return renderInfo();

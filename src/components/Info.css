@@ -1,5 +1,6 @@
-.material-icons {
+.icons {
   cursor: pointer;
+  margin-bottom: 10px;
 }
 
 .material-icons.md-light {

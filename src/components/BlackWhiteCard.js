@@ -1,12 +1,12 @@
 import React from "react";
 import blackwhite from "../assets/checker-board.png";
 
-const BlackWhiteCard = props => {
+const BlackWhiteCard = ({ width }) => {
   return (
     <img
       src={blackwhite}
-      height={props.width}
-      width={props.width}
+      height={width}
+      width={width}
       alt="blackwhite card"
     />
   );
